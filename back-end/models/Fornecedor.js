@@ -11,11 +11,19 @@ const esquema = mongoose.Schema({
     },
     cnpj:{
         type: String,
-        required: true
+        required: true,
+        index: {unique: true}// Não pode repetir CNPJ
     },
     inscricao_estadual:{
         type: String,
-        required: false
+        required: true,
+        validate:{
+            validator: val => {
+                // Inscrição Estadual precisa ser 'ISENTO' ou um número inteiro
+                return val.toUpperCase() != 'ISENTO' || !isNaN(parseInt(val))
+            },
+            message: "Inscrição Estadual precisa ser 'ISENTO' ou um número inteiro"
+        }
     },
     endereco:{
         type: String,
